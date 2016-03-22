@@ -350,7 +350,7 @@ helicopter.velocityY = 0;
 // camera.position.y = 2;
 h_propeler.angularVelocity = 0;
 // helicopter.add(camera);
-
+helicopter.rotationX = 0;
 box.add(propeler);
 propeler.add(propeler2);
 // camera.lookAt(helicopter.position);
@@ -364,8 +364,8 @@ function render() {
   box.rotation.y = 0;
   if(keys[65]){helicopter.position.x-=helicopter.velocityZ/6; helicopter.rotation.y += 0.004; h_propeler.rotation.y += 0.4;} // Left
   if(keys[68]){helicopter.position.x+=helicopter.velocityZ/6;helicopter.rotation.y  -= 0.004;} // Right
-  if(keys[87] ){helicopter.rotationXx+=0.01; }// Up
-  if(keys[83] ){helicopter.rotation.x-=0.01; }// Down
+  if(keys[87] ){helicopter.rotationX+=0.006;  }// Up
+  if(keys[83] ){helicopter.rotationX-=0.006; }// Down
 
   if(keys[81] ){helicopter.rotation.y+=0.04; } // Q
   if(keys[69] ){helicopter.rotation.y-=0.04; } // E
@@ -441,12 +441,12 @@ function render() {
   // camera.lookAt(helicopter.position);
   // helicopter.position.z = 20;
   // camera.position.z = 30;
-  if (helicopter.rotation.x> 0){
-    helicopter.rotation.x -=0.004;
-  } else if(helicopter.rotation.x < 0){
-    helicopter.rotation.x +=0.004;
+  if (helicopter.rotationX> 0){
+    helicopter.rotationX -=0.004;
+  } else if(helicopter.rotationX < 0){
+    helicopter.rotationX +=0.004;
   }
-
+  helicopter.rotateX(helicopter.rotationX);
   var vBx = helicopter.velocity*Math.cos(helicopter.rotation.y); //Speed of bullet on x-axis
   var vBz = helicopter.velocity*Math.sin(helicopter.rotation.y);
 
