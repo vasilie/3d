@@ -124,7 +124,7 @@ h_tail_propeler.add( h_tail_propeler2);
 h_tail_hand.add(h_tail_propeler, h_tail_propeler_pin);
 h_propeler.add(h_propeler2);
 helicopter.add(h_cockpit, h_cockpit_medium, h_cockpit_small, h_tail_head, h_tail_arm,h_tail_hand,h_propeler_base, h_propeler_pin,h_propeler, h_rails, h_rails2);
-scene.add(helicopter);
+// scene.add(helicopter);
 // helicopter.add(camera);
 
 var renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -132,8 +132,8 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setClearColor( 0xFFE5FF);
 document.body.appendChild( renderer.domElement );
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+// renderer.shadowMap.enabled = true;
+// renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 var floor_geometry = new THREE.BoxGeometry( 12, 0.1, 120 );
 var material = new THREE.MeshPhongMaterial( {
@@ -157,16 +157,16 @@ var wall2 = new THREE.Mesh(wall_geometry, material);
 var wall3 = new THREE.Mesh(wall_geometry, top_wall_material);
 var wall4 = new THREE.Mesh(wall_geometry, top_wall_material);
 var wall5 = new THREE.Mesh( top_wall_geometry, top_wall_material);
-wall1.castShadow = true;
-wall1.receiveShadow = true;
-wall2.castShadow = true;
-wall2.receiveShadow = true;
-wall3.castShadow = true;
-wall3.receiveShadow = true;
-wall4.castShadow = true;
-wall4.receiveShadow = true;
-wall5.castShadow = true;
-wall5.receiveShadow = true;
+// wall1.castShadow = true;
+// wall1.receiveShadow = true;
+// wall2.castShadow = true;
+// wall2.receiveShadow = true;
+// wall3.castShadow = true;
+// wall3.receiveShadow = true;
+// wall4.castShadow = true;
+// wall4.receiveShadow = true;
+// wall5.castShadow = true;
+// wall5.receiveShadow = true;
 wall1.position.x = -3 - 0.2;
 wall2.position.x = 3 + 0.2;
 wall1.position.y = 1;
@@ -293,7 +293,7 @@ var directionalLight = new THREE.DirectionalLight( 0xFFE6A9, 0.5 );
 directionalLight.position.set( 0,1000,-6000 );
 directionalLight.target = box;
 directionalLight.castShadow = true;
-directionalLight.shadowCameraVisible = true
+// directionalLight.shadowCameraVisible = true
 directionalLight.shadow.camera.near = 10;
 directionalLight.shadow.camera.far = 6000;
 directionalLight.shadow.camera.left = -20;
@@ -331,9 +331,10 @@ text2.style.top = 200 + 'px';
 text2.style.left = 200 + 'px';
 document.body.appendChild(text2);
 
+var pivot = new THREE.Group();
+scene.add( pivot );
+pivot.add( helicopter, camera );
 
-
-camera.position.z = 4;
 box.position.x = 0;
 plane.position.y = -0.4;
 
@@ -342,17 +343,20 @@ propeler.position.x = 0
 propeler.position.y = 2
 propeler.position.z = 0
 box.velocity = -5;
-camera.position.z = 3;
+camera.position.z =  -  7;
 camera.position.y = 3;
-camera.position.x = 3;
-helicopter.velocityZ = 0;
-helicopter.velocityY = 0;
+camera.position.x = 0;
 // camera.position.y = 2;
 h_propeler.angularVelocity = 0;
 // helicopter.add(camera);
 helicopter.rotationX = 0;
+helicopter.rotationY = 0;
+helicopter.rotationZ = 0;
+helicopter.position.set(0,0,0);
+helicopter.velocity = 0;
 box.add(propeler);
 propeler.add(propeler2);
+pivot.rotation.y = (Math.PI);
 // camera.lookAt(helicopter.position);
 // camera.lookAt(scene.position);
 function render() {
@@ -362,66 +366,33 @@ function render() {
   }
   // console.log(propeler.position.z);
   box.rotation.y = 0;
-  if(keys[65]){helicopter.position.x-=helicopter.velocityZ/6; helicopter.rotation.y += 0.004; h_propeler.rotation.y += 0.4;} // Left
-  if(keys[68]){helicopter.position.x+=helicopter.velocityZ/6;helicopter.rotation.y  -= 0.004;} // Right
-  if(keys[87] ){helicopter.rotationX+=0.006;  }// Up
-  if(keys[83] ){helicopter.rotationX-=0.006; }// Down
+  if(keys[65]){helicopter.rotation.z -=0.011} // Left
+  if(keys[68]){helicopter.rotation.z +=0.011} // Right
+  if(keys[87] ){helicopter.rotation.x +=0.011}// Up
+  if(keys[83] ){helicopter.rotation.x -=0.011}// Down
 
-  if(keys[81] ){helicopter.rotation.y+=0.04; } // Q
-  if(keys[69] ){helicopter.rotation.y-=0.04; } // E
+  if(keys[81] ){pivot.rotation.y+=0.04 } // Q
+  if(keys[69] ){pivot.rotation.y-=0.04} // E
 
 
   if(keys[16] ){shoot();} // down
-  // camera.position.x = box.position.x;
-  // camera.position.y = box.position.y+0.5;
-  // camera.position.z = box.position.z+5;
-  // camera.lookAt(box.position);
 
-
+  helicopter.velocity += helicopter.rotation.x*0.005;
   if(keys[38] || keys[32] ){h_propeler.angularVelocity+=0.01; console.log(h_propeler.angularVelocity) }
 
-  // if(keys[40] || keys[17] ){box.position.y-=0.05; }
-  if(keys[39]){box.rotation.y+=0.05;}
-  if(keys[37]){box.rotation.y-=0.05;}
-  if (box.rotation.y >= 0.04){box.rotation.y = 0.04}
-  if (box.rotation.y <= - 0.04){box.rotation.y = -0.04}
-  // scene.rotation.y += 0.01;
-  // helicopter.velocityY -=0.01;
-  if (helicopter.position.y >0.76){
-    helicopter.velocityY -= 0.008;
-  }  else if (helicopter.position.y <0.76){
+  if(keys[39]){}
+  if(keys[37]){}
+  if (pivot.position.y >0.76){
+    helicopter.velocityY -= 0.002;
+  }  else if (pivot.position.y <0.76){
     helicopter.velocityY = 0;
-    helicopter.position.y = 0.76;
-  }
-  if (box.velocityZ >= 2.7){
-    box.velocityZ  = 2.7;
+    pivot.position.y = 0.76;
   }
 
-  if( h_propeler.angularVelocity >0.7){helicopter.velocityY +=0.015}
-    helicopter.position.y += helicopter.velocityY;
-    helicopter.velocity = helicopter.rotation.x *0.3;
-  if (box.position.z<-7000){
-    box.position.z = 0;
-  }
-  box.position.z -= box.velocityZ;
-  if (box.position.x <= -2.5){
-        box.position.x = -2.5;
-  } else if (box.position.x >= 2.5){
-        box.position.x = 2.5;
-  }
-  if (box.rotation.z > 0.005){
-    box.rotation.z -= 0.01;
-  } else if (box.rotation.z < 0){
-    box.rotation.z += 0.005;
-  } else {
-    box.rotation.z = 0;
-  }
-  for (i in bullets){
-    bullets[i].position.z-= 5.30;
-    if (bullets[i].position.z < -20000){
-      scene.remove(bullets[i]);
-      bullets.splice(i,1);
-    }
+  if( h_propeler.angularVelocity > 0.7){
+    helicopter.velocityY +=0.004
+    // helicopter.velocity = helicopter.rotation.x *0.002;
+    console.log("extra");
   }
   if (h_propeler.angularVelocity > 0){
     h_propeler.angularVelocity -=0.001;
@@ -432,31 +403,38 @@ function render() {
     h_propeler.angularVelocity = 0.7;
   }
   h_propeler.rotation.y+=h_propeler.angularVelocity;
-  // camera.lookAt(box.position);
-  // propeler.position.x = box.position.x;
-  // propeler.position.y = box.position.y - 1;
-  // propeler.position.z = box.position.z;
-  // text2.innerHTML = "VELOCITYZ:"+box.velocityZ;
-  // camera.position.set(10, 10, 10);
-  // camera.lookAt(helicopter.position);
-  // helicopter.position.z = 20;
-  // camera.position.z = 30;
-  if (helicopter.rotationX> 0){
-    helicopter.rotationX -=0.004;
-  } else if(helicopter.rotationX < 0){
-    helicopter.rotationX +=0.004;
+  if (helicopter.rotation.x> 0){
+    helicopter.rotation.x -=0.004;
+  } else if(helicopter.rotation.x < 0){
+    helicopter.rotation.x +=0.004;
   }
-  helicopter.rotateX(helicopter.rotationX);
-  var vBx = helicopter.velocity*Math.cos(helicopter.rotation.y); //Speed of bullet on x-axis
-  var vBz = helicopter.velocity*Math.sin(helicopter.rotation.y);
+  if (helicopter.rotation.z> 0){
+    helicopter.rotation.z -=0.004;
+  } else if(helicopter.rotation.z < 0){
+    helicopter.rotation.z +=0.004;
+  }
+  // if (helicopter.rotationZ> 0){
+  //   helicopter.rotation.z -=0.004;
+  //   helicopter.rotationZ -=0.004;
+  // } else if(helicopter.rotationZ < 0){
+  //   helicopter.rotation.z +=0.004;
+  //   helicopter.rotationZ +=0.004;
+  // }
+  // helicopter.rotateX(helicopter.rotationX);
+  // helicopter.rotateY(helicopter.rotationY);
+  // helicopter.rotateZ(helicopter.rotationZ);
+  var vBx = helicopter.velocity*Math.cos(pivot.rotation.y); //Speed
+  var vBz = helicopter.velocity*Math.sin(pivot.rotation.y);
 
-  helicopter.position.z+=vBx;
-  helicopter.position.x+=vBz;
+  pivot.position.z+=vBx;
+  pivot.position.x+=vBz;
+  pivot.position.y += helicopter.velocityY;
   box.position.z = -20;
 
-  camera.position.x = helicopter.position.x;
-  camera.position.y = helicopter.position.y+3;
-  camera.position.z = helicopter.position.z-10;
+  if(helicopter.rotation.x < 0.004 && helicopter.rotation.x > - 0.004 ){
+    helicopter.rotation.x = 0;
+  }
+  // console.log(helicopter.rotationX);
   camera.lookAt(helicopter.position);
 	renderer.render( scene, camera );
   // console.log(helicopter.rotation);
